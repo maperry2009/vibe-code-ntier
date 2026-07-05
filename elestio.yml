@@ -1,0 +1,12 @@
+config:
+  runTime: ".NET"
+  version: "10"
+  installCommand: "dotnet restore src/NameDemo.Api/NameDemo.Api.csproj"
+  buildCommand: "dotnet publish src/NameDemo.Api/NameDemo.Api.csproj -c Release -o ./publish-api"
+  runCommand: "dotnet ./publish-api/NameDemo.Api.dll"
+  buildDir: "./publish-api"
+  env:
+    - key: ASPNETCORE_URLS
+      value: "http://0.0.0.0:8080"
+    - key: ASPNETCORE_ENVIRONMENT
+      value: "Production"

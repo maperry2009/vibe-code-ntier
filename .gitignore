@@ -1,0 +1,21 @@
+## Build
+bin/
+obj/
+publish/
+publish-api/
+publish-web/
+
+## IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+## OS
+.DS_Store
+
+## Logs
+*.log
+
+## User secrets
+**/appsettings.Development.json

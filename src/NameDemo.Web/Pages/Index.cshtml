@@ -1,0 +1,49 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Name Demo";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <h1 class="h3 mb-4">n-Tier Name Demo</h1>
+        <p class="text-muted">
+            This page calls the Web API tier, which saves your name in PostgreSQL.
+        </p>
+
+        <form method="post" class="card p-4 shadow-sm mb-4">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Enter your name</label>
+                <input asp-for="Name" class="form-control" placeholder="Your name" autofocus />
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger py-2">@Model.ErrorMessage</div>
+            }
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="card p-4 shadow-sm">
+            <h2 class="h5">Saved names</h2>
+
+            @if (Model.Names.Count == 0)
+            {
+                <p class="text-muted mb-0">No names yet. Submit one above.</p>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var guest in Model.Names)
+                    {
+                        <li class="list-group-item px-0">
+                            <strong>@guest.Name</strong>
+                            <span class="text-muted small ms-2">@guest.CreatedAt.ToLocalTime().ToString("g")</span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>

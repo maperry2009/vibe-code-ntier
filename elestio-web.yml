@@ -1,0 +1,12 @@
+config:
+  runTime: ".NET"
+  version: "10"
+  installCommand: "dotnet restore src/NameDemo.Web/NameDemo.Web.csproj"
+  buildCommand: "dotnet publish src/NameDemo.Web/NameDemo.Web.csproj -c Release -o ./publish-web"
+  runCommand: "dotnet ./publish-web/NameDemo.Web.dll"
+  buildDir: "./publish-web"
+  env:
+    - key: ASPNETCORE_URLS
+      value: "http://0.0.0.0:8080"
+    - key: ASPNETCORE_ENVIRONMENT
+      value: "Production"
