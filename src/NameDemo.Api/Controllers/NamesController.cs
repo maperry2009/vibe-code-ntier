@@ -37,7 +37,7 @@ public class NamesController(AppDbContext db, IWebhookNotifier webhookNotifier) 
         db.GuestNames.Add(guestName);
         await db.SaveChangesAsync(cancellationToken);
 
-        _ = webhookNotifier.TryNotifyGuestNameSavedAsync(guestName, CancellationToken.None);
+        await webhookNotifier.TryNotifyGuestNameSavedAsync(guestName, cancellationToken);
 
         return CreatedAtAction(nameof(GetAll), new { id = guestName.Id }, guestName);
     }

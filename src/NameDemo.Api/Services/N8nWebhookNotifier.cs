@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using NameDemo.Data;
 
@@ -16,34 +16,38 @@ public class N8nWebhookNotifier(
         var webhookUrl = options.Value.Url;
         if (string.IsNullOrWhiteSpace(webhookUrl))
         {
-            logger.LogDebug("Webhook URL is not configured; skipping notification.");
+            logger.LogWarning("Webhook URL is not configured; skipping notification.");
             return;
         }
 
         try
         {
-            var payload = new
+            var url = QueryHelpers.AddQueryString(webhookUrl, new Dictionary<string, string?>
             {
-                guestName.Id,
-                guestName.Name,
-                guestName.CreatedAt,
-                Event = "guest_name.created"
-            };
+                ["name"] = guestName.Name,
+                ["id"] = guestName.Id.ToString(),
+                ["createdAt"] = guestName.CreatedAt.ToString("O")
+            });
 
-            using var response = await httpClient.PostAsJsonAsync(webhookUrl, payload, cancellationToken);
+            logger.LogInformation("Calling n8n webhook for guest name {GuestNameId}.", guestName.Id);
+
+            using var response = await httpClient.GetAsync(url, cancellationToken);
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
             if (response.IsSuccessStatusCode)
             {
                 logger.LogInformation(
-                    "Webhook notification sent for guest name {GuestNameId}.",
-                    guestName.Id);
+                    "Webhook notification sent for guest name {GuestNameId}. Response: {ResponseBody}",
+                    guestName.Id,
+                    responseBody);
                 return;
             }
 
             logger.LogWarning(
-                "Webhook notification failed for guest name {GuestNameId}. Status: {StatusCode}",
+                "Webhook notification failed for guest name {GuestNameId}. Status: {StatusCode}. Response: {ResponseBody}",
                 guestName.Id,
-                (int)response.StatusCode);
+                (int)response.StatusCode,
+                responseBody);
         }
         catch (Exception ex)
         {
