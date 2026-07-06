@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:16
-    container_name: namedemo-db
     environment:
       POSTGRES_USER: namedemo
       POSTGRES_PASSWORD: namedemo

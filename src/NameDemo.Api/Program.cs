@@ -29,14 +29,19 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-}
-
 app.UseCors();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 app.MapControllers();
+
+try
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+catch (Exception ex)
+{
+    app.Logger.LogError(ex, "Database migration failed. Check ConnectionStrings__DefaultConnection.");
+}
 
 app.Run();

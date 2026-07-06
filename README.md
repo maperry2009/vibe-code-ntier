@@ -25,7 +25,7 @@ Browser  →  NameDemo.Web  →  NameDemo.Api  →  PostgreSQL
 ### 1. Start the database
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose.dev.yml up -d
 ```
 
 ### 2. Start the API (terminal 1)
