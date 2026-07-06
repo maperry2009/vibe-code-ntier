@@ -2,6 +2,9 @@ using NameDemo.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var urls = builder.Configuration["ASPNETCORE_URLS"] ?? "http://0.0.0.0:8080";
+builder.WebHost.UseUrls(urls);
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<NameApiClient>((serviceProvider, client) =>
@@ -26,5 +29,7 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+
+app.Logger.LogInformation("Starting NameDemo.Web on {Urls}", urls);
 
 app.Run();

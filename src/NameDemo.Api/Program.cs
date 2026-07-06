@@ -3,6 +3,9 @@ using NameDemo.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var urls = builder.Configuration["ASPNETCORE_URLS"] ?? "http://0.0.0.0:8080";
+builder.WebHost.UseUrls(urls);
+
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -32,6 +35,8 @@ var app = builder.Build();
 app.UseCors();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 app.MapControllers();
+
+app.Logger.LogInformation("Starting NameDemo.Api on {Urls}", urls);
 
 try
 {

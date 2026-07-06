@@ -4,46 +4,67 @@
     ViewData["Title"] = "Name Demo";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-        <h1 class="h3 mb-4">n-Tier Name Demo</h1>
-        <p class="text-muted">
-            This page calls the Web API tier, which saves your name in PostgreSQL.
-        </p>
+<section class="hero text-center">
+    <p class="tier-flow">
+        <span class="tier-badge">Web</span>
+        <span class="tier-arrow" aria-hidden="true">→</span>
+        <span class="tier-badge">API</span>
+        <span class="tier-arrow" aria-hidden="true">→</span>
+        <span class="tier-badge">PostgreSQL</span>
+    </p>
+    <h1 class="hero-title">n-Tier Name Demo</h1>
+    <p class="hero-subtitle">
+        Enter your name below. It travels through the web app, REST API, and into the database.
+    </p>
+</section>
 
-        <form method="post" class="card p-4 shadow-sm mb-4">
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label">Enter your name</label>
-                <input asp-for="Name" class="form-control" placeholder="Your name" autofocus />
+<div class="demo-grid">
+    <div class="demo-card">
+        <div class="card-label">Your input</div>
+        <form method="post" class="name-form">
+            <label asp-for="Name" class="form-label">Enter your name</label>
+            <div class="input-row">
+                <input asp-for="Name" class="form-control name-input" placeholder="e.g. Michael" autofocus />
+                <button type="submit" class="btn btn-submit">Save name</button>
             </div>
 
             @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
             {
-                <div class="alert alert-danger py-2">@Model.ErrorMessage</div>
+                <div class="alert alert-error" role="alert">@Model.ErrorMessage</div>
             }
-
-            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+    </div>
 
-        <div class="card p-4 shadow-sm">
-            <h2 class="h5">Saved names</h2>
-
-            @if (Model.Names.Count == 0)
-            {
-                <p class="text-muted mb-0">No names yet. Submit one above.</p>
-            }
-            else
-            {
-                <ul class="list-group list-group-flush">
-                    @foreach (var guest in Model.Names)
-                    {
-                        <li class="list-group-item px-0">
-                            <strong>@guest.Name</strong>
-                            <span class="text-muted small ms-2">@guest.CreatedAt.ToLocalTime().ToString("g")</span>
-                        </li>
-                    }
-                </ul>
-            }
+    <div class="demo-card">
+        <div class="card-header-row">
+            <div class="card-label">Saved names</div>
+            <span class="name-count">@Model.Names.Count</span>
         </div>
+
+        @if (Model.Names.Count == 0)
+        {
+            <div class="empty-state">
+                <p>No names yet</p>
+                <span>Submit a name to see it stored via the API.</span>
+            </div>
+        }
+        else
+        {
+            <ul class="name-list">
+                @foreach (var guest in Model.Names)
+                {
+                    var initial = string.IsNullOrWhiteSpace(guest.Name)
+                        ? "?"
+                        : char.ToUpper(guest.Name.Trim()[0]).ToString();
+                    <li class="name-item">
+                        <span class="avatar" aria-hidden="true">@initial</span>
+                        <div class="name-details">
+                            <strong>@guest.Name</strong>
+                            <span>@guest.CreatedAt.ToLocalTime().ToString("MMM d, yyyy · h:mm tt")</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
     </div>
 </div>
