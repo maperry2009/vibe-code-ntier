@@ -1,6 +1,10 @@
 using NameDemo.Web.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    ContentRootPath = AppContext.BaseDirectory,
+});
 
 var urls = builder.Configuration["ASPNETCORE_URLS"] ?? "http://0.0.0.0:8080";
 builder.WebHost.UseUrls(urls);

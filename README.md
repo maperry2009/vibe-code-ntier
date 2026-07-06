@@ -81,7 +81,7 @@ Create a **second CI/CD pipeline** from the same repo using [`elestio-web.yml`](
 
 - **Install:** `dotnet restore src/NameDemo.Web/NameDemo.Web.csproj`
 - **Build:** `dotnet publish src/NameDemo.Web/NameDemo.Web.csproj -c Release -o ./publish-web`
-- **Run:** `dotnet ./publish-web/NameDemo.Web.dll`
+- **Run:** `cd ./publish-web && dotnet NameDemo.Web.dll`
 - **Container port:** `8080`
 
 Environment variables:
