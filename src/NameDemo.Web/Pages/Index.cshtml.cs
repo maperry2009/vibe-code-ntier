@@ -9,9 +9,6 @@ public class IndexModel(NameApiClient nameApiClient) : PageModel
     [BindProperty]
     public string Name { get; set; } = string.Empty;
 
-    [BindProperty]
-    public string LastName { get; set; } = string.Empty;
-
     public IReadOnlyList<GuestNameDto> Names { get; private set; } = [];
 
     public string? ErrorMessage { get; private set; }
@@ -25,12 +22,12 @@ public class IndexModel(NameApiClient nameApiClient) : PageModel
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            ErrorMessage = "Please enter your first name.";
+            ErrorMessage = "Please enter your name.";
             Names = await nameApiClient.GetNamesAsync(cancellationToken);
             return Page();
         }
 
-        var saved = await nameApiClient.AddNameAsync(Name, LastName, cancellationToken);
+        var saved = await nameApiClient.AddNameAsync(Name, cancellationToken);
         if (!saved)
         {
             ErrorMessage = "Could not save your name. Is the API running?";
@@ -39,12 +36,5 @@ public class IndexModel(NameApiClient nameApiClient) : PageModel
         }
 
         return RedirectToPage();
-    }
-
-    public static string FormatFullName(string name, string lastName)
-    {
-        var first = name.Trim();
-        var last = lastName.Trim();
-        return string.IsNullOrEmpty(last) ? first : $"{first} {last}";
     }
 }
