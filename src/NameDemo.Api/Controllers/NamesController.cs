@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NameDemo.Api.Services;
 using NameDemo.Data;
 
 namespace NameDemo.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class NamesController(AppDbContext db) : ControllerBase
+public class NamesController(AppDbContext db, IWebhookNotifier webhookNotifier) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GuestName>>> GetAll(CancellationToken cancellationToken)
@@ -35,6 +36,8 @@ public class NamesController(AppDbContext db) : ControllerBase
 
         db.GuestNames.Add(guestName);
         await db.SaveChangesAsync(cancellationToken);
+
+        _ = webhookNotifier.TryNotifyGuestNameSavedAsync(guestName, CancellationToken.None);
 
         return CreatedAtAction(nameof(GetAll), new { id = guestName.Id }, guestName);
     }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NameDemo.Api.Services;
 using NameDemo.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,11 @@ var urls = builder.Configuration["ASPNETCORE_URLS"] ?? "http://0.0.0.0:8080";
 builder.WebHost.UseUrls(urls);
 
 builder.Services.AddControllers();
-
+builder.Services.Configure<WebhookOptions>(builder.Configuration.GetSection(WebhookOptions.SectionName));
+builder.Services.AddHttpClient<IWebhookNotifier, N8nWebhookNotifier>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

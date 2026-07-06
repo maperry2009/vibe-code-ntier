@@ -12,6 +12,8 @@ config:
       value: "8080"
     - key: ASPNETCORE_ENVIRONMENT
       value: "Production"
+    - key: Webhook__Url
+      value: "https://n8n-bw9fb-u75553.vm.elestio.app/webhook-test/92347575-8a31-42b4-bdc6-ae79c5b62038"
 exposedPorts:
   - protocol: "HTTP"
     hostPort: "8080"
