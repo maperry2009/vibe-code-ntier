@@ -2,9 +2,9 @@ using System.Net.Http.Json;
 
 namespace NameDemo.Web.Services;
 
-public record GuestNameDto(int Id, string Name, DateTime CreatedAt);
+public record GuestNameDto(int Id, string Name, string LastName, DateTime CreatedAt);
 
-public record CreateNameRequest(string Name);
+public record CreateNameRequest(string Name, string? LastName);
 
 public class NameApiClient(HttpClient httpClient)
 {
@@ -14,11 +14,11 @@ public class NameApiClient(HttpClient httpClient)
         return names ?? [];
     }
 
-    public async Task<bool> AddNameAsync(string name, CancellationToken cancellationToken = default)
+    public async Task<bool> AddNameAsync(string name, string lastName, CancellationToken cancellationToken = default)
     {
         var response = await httpClient.PostAsJsonAsync(
             "api/names",
-            new CreateNameRequest(name),
+            new CreateNameRequest(name, lastName),
             cancellationToken);
 
         return response.IsSuccessStatusCode;

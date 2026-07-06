@@ -30,7 +30,8 @@ public class NamesController(AppDbContext db) : ControllerBase
 
         var guestName = new GuestName
         {
-            Name = request.Name.Trim()
+            Name = request.Name.Trim(),
+            LastName = request.LastName?.Trim() ?? string.Empty
         };
 
         db.GuestNames.Add(guestName);
@@ -40,4 +41,4 @@ public class NamesController(AppDbContext db) : ControllerBase
     }
 }
 
-public record CreateNameRequest(string Name);
+public record CreateNameRequest(string Name, string? LastName);

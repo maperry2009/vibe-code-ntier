@@ -14,7 +14,7 @@
     </p>
     <h1 class="hero-title">n-Tier Name Demo</h1>
     <p class="hero-subtitle">
-        Enter your name below. It travels through the web app, REST API, and into the database.
+        Enter your first and last name below. It travels through the web app, REST API, and into the database.
     </p>
 </section>
 
@@ -22,9 +22,13 @@
     <div class="demo-card">
         <div class="card-label">Your input</div>
         <form method="post" class="name-form">
-            <label asp-for="Name" class="form-label">Enter your name</label>
-            <div class="input-row">
-                <input asp-for="Name" class="form-control name-input" placeholder="e.g. Michael" autofocus />
+            <label asp-for="Name" class="form-label">First name</label>
+            <input asp-for="Name" class="form-control name-input name-input-full" placeholder="e.g. Michael" autofocus />
+
+            <label asp-for="LastName" class="form-label mt-3">Last name</label>
+            <input asp-for="LastName" class="form-control name-input name-input-full" placeholder="e.g. Perry" />
+
+            <div class="form-actions">
                 <button type="submit" class="btn btn-submit">Save name</button>
             </div>
 
@@ -59,7 +63,7 @@
                     <li class="name-item">
                         <span class="avatar" aria-hidden="true">@initial</span>
                         <div class="name-details">
-                            <strong>@guest.Name</strong>
+                            <strong>@IndexModel.FormatFullName(guest.Name, guest.LastName)</strong>
                             <span>@guest.CreatedAt.ToLocalTime().ToString("MMM d, yyyy · h:mm tt")</span>
                         </div>
                     </li>

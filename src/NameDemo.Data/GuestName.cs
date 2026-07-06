@@ -6,5 +6,7 @@ public class GuestName
 
     public required string Name { get; set; }
 
+    public string LastName { get; set; } = string.Empty;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
