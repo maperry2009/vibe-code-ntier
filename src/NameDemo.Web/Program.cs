@@ -21,10 +21,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
-app.MapStaticAssets();
-app.MapRazorPages().WithStaticAssets();
+app.MapRazorPages();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 
 app.Run();

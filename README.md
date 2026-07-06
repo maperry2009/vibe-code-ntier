@@ -19,7 +19,7 @@ Browser  →  NameDemo.Web  →  NameDemo.Api  →  PostgreSQL
 
 ### Prerequisites
 
-- [.NET SDK 10](https://dotnet.microsoft.com/download)
+- [.NET SDK 8](https://dotnet.microsoft.com/download)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for PostgreSQL)
 
 ### 1. Start the database
@@ -60,7 +60,7 @@ Create a managed **PostgreSQL** service in Elest.io and copy its connection stri
 ### 2. API pipeline
 
 1. CI/CD → GitHub → import `maperry2009/vibe-code-ntier`
-2. Runtime: **.NET 10**
+2. Runtime: **.NET 8**
 3. Use settings from [`elestio.yml`](elestio.yml), or set manually:
    - **Install:** `dotnet restore src/NameDemo.Api/NameDemo.Api.csproj`
    - **Build:** `dotnet publish src/NameDemo.Api/NameDemo.Api.csproj -c Release -o ./publish-api`

@@ -1,6 +1,6 @@
 config:
   runTime: ".NET"
-  version: "10"
+  version: "8"
   installCommand: "dotnet restore src/NameDemo.Web/NameDemo.Web.csproj"
   buildCommand: "dotnet publish src/NameDemo.Web/NameDemo.Web.csproj -c Release -o ./publish-web"
   runCommand: "dotnet ./publish-web/NameDemo.Web.dll"
