@@ -1,6 +1,6 @@
 # vibe-code-ntier
 
-A simple **n-tier .NET 8 demo** built to show how a change flows through all layers — Web UI, REST API, PostgreSQL — and deploys to [Elest.io](https://elest.io) via CI/CD.
+A simple **n-tier .NET 8 demo** built to show how a change flows through all layers — Web UI, REST API, PostgreSQL — and deploys to [Elest.io](https://elest.io) via CI/CD on push to `main`.
 
 ```
 Browser  →  NameDemo.Web  →  NameDemo.Api  →  PostgreSQL
