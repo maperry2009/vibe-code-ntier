@@ -25,6 +25,7 @@ public class N8nWebhookNotifier(
             var url = QueryHelpers.AddQueryString(webhookUrl, new Dictionary<string, string?>
             {
                 ["name"] = guestName.Name,
+                ["lastName"] = guestName.LastName,
                 ["id"] = guestName.Id.ToString(),
                 ["createdAt"] = guestName.CreatedAt.ToString("O")
             });

@@ -29,9 +29,15 @@ public class NamesController(AppDbContext db, IWebhookNotifier webhookNotifier) 
             return BadRequest(new { message = "Name is required." });
         }
 
+        if (string.IsNullOrWhiteSpace(request.LastName))
+        {
+            return BadRequest(new { message = "Last name is required." });
+        }
+
         var guestName = new GuestName
         {
-            Name = request.Name.Trim()
+            Name = request.Name.Trim(),
+            LastName = request.LastName.Trim()
         };
 
         db.GuestNames.Add(guestName);
@@ -43,4 +49,4 @@ public class NamesController(AppDbContext db, IWebhookNotifier webhookNotifier) 
     }
 }
 
-public record CreateNameRequest(string Name);
+public record CreateNameRequest(string Name, string LastName);

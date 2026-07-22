@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.ToTable("guest_names");
             entity.HasKey(g => g.Id);
             entity.Property(g => g.Name).HasMaxLength(200).IsRequired();
+            entity.Property(g => g.LastName).HasMaxLength(200).IsRequired();
             entity.Property(g => g.CreatedAt).IsRequired();
         });
     }

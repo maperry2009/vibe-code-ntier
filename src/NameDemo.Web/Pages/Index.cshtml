@@ -22,9 +22,12 @@
     <div class="demo-card">
         <div class="card-label">Your input</div>
         <form method="post" class="name-form">
-            <label asp-for="Name" class="form-label">Enter your name</label>
+            <label asp-for="Name" class="form-label">First name</label>
+            <input asp-for="Name" class="form-control name-input" placeholder="e.g. Michael" autofocus />
+
+            <label asp-for="LastName" class="form-label">Last name</label>
             <div class="input-row">
-                <input asp-for="Name" class="form-control name-input" placeholder="e.g. Michael" autofocus />
+                <input asp-for="LastName" class="form-control name-input" placeholder="e.g. Perry" />
                 <button type="submit" class="btn btn-submit">Save name</button>
             </div>
 
@@ -53,13 +56,14 @@
             <ul class="name-list">
                 @foreach (var guest in Model.Names)
                 {
+                    var displayName = $"{guest.Name} {guest.LastName}".Trim();
                     var initial = string.IsNullOrWhiteSpace(guest.Name)
                         ? "?"
                         : char.ToUpper(guest.Name.Trim()[0]).ToString();
                     <li class="name-item">
                         <span class="avatar" aria-hidden="true">@initial</span>
                         <div class="name-details">
-                            <strong>@guest.Name</strong>
+                            <strong>@displayName</strong>
                             <span>@guest.CreatedAt.ToLocalTime().ToString("MMM d, yyyy · h:mm tt")</span>
                         </div>
                     </li>
