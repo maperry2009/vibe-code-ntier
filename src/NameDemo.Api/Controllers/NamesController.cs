@@ -21,17 +21,12 @@ public class NamesController(AppDbContext db, IWebhookNotifier webhookNotifier) 
 
     [HttpPost]
     public async Task<ActionResult<GuestName>> Create(
-        [FromBody] CreateNameRequest request,
+        [FromBody] NameRequest request,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.Name))
+        if (!TryValidateNameRequest(request, out var errorResult))
         {
-            return BadRequest(new { message = "Name is required." });
-        }
-
-        if (string.IsNullOrWhiteSpace(request.LastName))
-        {
-            return BadRequest(new { message = "Last name is required." });
+            return errorResult!;
         }
 
         var guestName = new GuestName
@@ -47,6 +42,48 @@ public class NamesController(AppDbContext db, IWebhookNotifier webhookNotifier) 
 
         return CreatedAtAction(nameof(GetAll), new { id = guestName.Id }, guestName);
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<GuestName>> Update(
+        int id,
+        [FromBody] NameRequest request,
+        CancellationToken cancellationToken)
+    {
+        if (!TryValidateNameRequest(request, out var errorResult))
+        {
+            return errorResult!;
+        }
+
+        var guestName = await db.GuestNames.FindAsync([id], cancellationToken);
+        if (guestName is null)
+        {
+            return NotFound(new { message = $"Name with id {id} was not found." });
+        }
+
+        guestName.Name = request.Name.Trim();
+        guestName.LastName = request.LastName.Trim();
+        await db.SaveChangesAsync(cancellationToken);
+
+        return Ok(guestName);
+    }
+
+    private static bool TryValidateNameRequest(NameRequest request, out ActionResult? errorResult)
+    {
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            errorResult = new BadRequestObjectResult(new { message = "Name is required." });
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(request.LastName))
+        {
+            errorResult = new BadRequestObjectResult(new { message = "Last name is required." });
+            return false;
+        }
+
+        errorResult = null;
+        return true;
+    }
 }
 
-public record CreateNameRequest(string Name, string LastName);
+public record NameRequest(string Name, string LastName);

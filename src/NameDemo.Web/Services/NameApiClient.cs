@@ -4,7 +4,7 @@ namespace NameDemo.Web.Services;
 
 public record GuestNameDto(int Id, string Name, string LastName, DateTime CreatedAt);
 
-public record CreateNameRequest(string Name, string LastName);
+public record NameRequest(string Name, string LastName);
 
 public class NameApiClient(HttpClient httpClient)
 {
@@ -18,7 +18,17 @@ public class NameApiClient(HttpClient httpClient)
     {
         var response = await httpClient.PostAsJsonAsync(
             "api/names",
-            new CreateNameRequest(name, lastName),
+            new NameRequest(name, lastName),
+            cancellationToken);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> UpdateNameAsync(int id, string name, string lastName, CancellationToken cancellationToken = default)
+    {
+        var response = await httpClient.PutAsJsonAsync(
+            $"api/names/{id}",
+            new NameRequest(name, lastName),
             cancellationToken);
 
         return response.IsSuccessStatusCode;

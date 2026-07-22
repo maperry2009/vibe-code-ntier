@@ -20,16 +20,23 @@
 
 <div class="demo-grid">
     <div class="demo-card">
-        <div class="card-label">Your input</div>
+        <div class="card-label">@(Model.IsEditing ? "Edit name" : "Your input")</div>
         <form method="post" class="name-form">
+            <input type="hidden" asp-for="EditId" />
+
             <label asp-for="Name" class="form-label">First name</label>
             <input asp-for="Name" class="form-control name-input" placeholder="e.g. Michael" autofocus />
 
             <label asp-for="LastName" class="form-label">Last name</label>
             <div class="input-row">
                 <input asp-for="LastName" class="form-control name-input" placeholder="e.g. Perry" />
-                <button type="submit" class="btn btn-submit">Save name</button>
+                <button type="submit" class="btn btn-submit">@(Model.IsEditing ? "Update name" : "Save name")</button>
             </div>
+
+            @if (Model.IsEditing)
+            {
+                <a class="btn-cancel" asp-page="/Index">Cancel</a>
+            }
 
             @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
             {
@@ -60,12 +67,14 @@
                     var initial = string.IsNullOrWhiteSpace(guest.Name)
                         ? "?"
                         : char.ToUpper(guest.Name.Trim()[0]).ToString();
-                    <li class="name-item">
+                    var isActiveEdit = Model.EditId == guest.Id;
+                    <li class="name-item @(isActiveEdit ? "name-item-editing" : null)">
                         <span class="avatar" aria-hidden="true">@initial</span>
                         <div class="name-details">
                             <strong>@displayName</strong>
                             <span>@guest.CreatedAt.ToLocalTime().ToString("MMM d, yyyy · h:mm tt")</span>
                         </div>
+                        <a class="btn-edit" asp-page="/Index" asp-route-editId="@guest.Id">Edit</a>
                     </li>
                 }
             </ul>
